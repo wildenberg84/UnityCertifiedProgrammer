@@ -237,7 +237,7 @@ PlayerSettings:
   iOSRequireARKit: 0
   iOSAutomaticallyDetectAndAddCapabilities: 1
   appleEnableProMotion: 0
-  clonedFromGUID: 40836da6a7c7c764c97ea08361dd0659
+  clonedFromGUID: 37a5d305693c9e64fa58cdfd83a01fba
   templatePackageId: 
   templateDefaultScene: Assets/Scenes/SampleScene.unity
   AndroidTargetArchitectures: 5
