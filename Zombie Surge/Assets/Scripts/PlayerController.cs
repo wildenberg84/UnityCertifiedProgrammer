@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 1;
+    public float speed;
     public float verticalMaxPos = 17.5f;
     public float horizontalMaxPos = 23.7f;
 
@@ -22,10 +22,13 @@ public class PlayerController : MonoBehaviour
 
         ///// Move player horizontally if possible /////
 
+        Vector3 horizontalMovement = Vector3.right * speed * horizontalInput * Time.deltaTime;
+        Vector3 verticalMovement = Vector3.forward * speed * verticalInput * Time.deltaTime;
+
         // player can move both ways horizontally
         if (transform.position.x < horizontalMaxPos && transform.position.x > -horizontalMaxPos)
         {
-            transform.Translate(Vector3.right * speed * horizontalInput);
+            transform.Translate(horizontalMovement);
         }
         // player can move right
         else if(transform.position.x < horizontalMaxPos)
@@ -33,7 +36,7 @@ public class PlayerController : MonoBehaviour
             // player wants to move right
             if(horizontalInput > 0)
             {
-                transform.Translate(Vector3.right * speed * horizontalInput);
+                transform.Translate(horizontalMovement);
             }
         }
         // player can move left
@@ -42,7 +45,7 @@ public class PlayerController : MonoBehaviour
             // player wants to move left
             if (horizontalInput < 0)
             {
-                transform.Translate(Vector3.right * speed * horizontalInput);
+                transform.Translate(horizontalMovement);
             }
         }
 
@@ -51,7 +54,7 @@ public class PlayerController : MonoBehaviour
         // player can move both ways vertically
         if (transform.position.z < verticalMaxPos && transform.position.z > -verticalMaxPos)
         {
-            transform.Translate(Vector3.forward * speed * verticalInput);
+            transform.Translate(verticalMovement);
         }
         // player can move up
         else if (transform.position.z < verticalMaxPos)
@@ -59,7 +62,7 @@ public class PlayerController : MonoBehaviour
             // player wants to move up
             if (verticalInput > 0)
             {
-                transform.Translate(Vector3.forward * speed * verticalInput);
+                transform.Translate(verticalMovement);
             }
         }
         // player can move down
@@ -68,7 +71,7 @@ public class PlayerController : MonoBehaviour
             // player wants to move down
             if (verticalInput < 0)
             {
-                transform.Translate(Vector3.forward * speed * verticalInput);
+                transform.Translate(verticalMovement);
             }
         }
 
@@ -96,5 +99,29 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, -verticalMaxPos);
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Powerup"))
+        {
+            Debug.Log("Power overflowing!");
+            
+            StartCoroutine("PowerupPickup");
+            Destroy(other.gameObject);
+        }
+        else if(other.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    IEnumerator PowerupPickup()
+    {
+        speed *= 2;
+
+        yield return new WaitForSeconds(5);
+
+        speed /= 2;
     }
 }
